@@ -18,3 +18,6 @@
 ---------------------------------------
 可以一起学习 我也是新手 刚刚学习Django不久 希望共同进步
 联系方式 256485837@qq.com
+
+
+如果报错No module named MYSQLdb: https://www.jianshu.com/p/fecd3e40390b

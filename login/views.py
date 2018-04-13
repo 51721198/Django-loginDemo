@@ -4,7 +4,10 @@ import MySQLdb
 import re
 import random
 
+
 # Create your views here.
+from login.models import Userinformation
+
 '''
 @ author：jaydenchan
 @ e-mail：2564845837@qq.com
@@ -59,20 +62,23 @@ class login():
                 return HttpResponse("密码错误！")  
 
     def get_Passwd(uid):
-        # 取正确密码
-        conn = MySQLdb.connect(host="localhost",user="root",passwd="root",db="userinformation",charset="utf8")  
-        cursor = conn.cursor()
-        sql = 'select password from userinfo where Uid = "{}"'.format(uid)
-        sql_return = cursor.execute(sql)
+        return Userinformation.objects.get(name=uid).password
 
-        #如果出现错误返回 ERROR
-        if sql_return == 0:
-            conn.close()  
-            return "ERROR"
-        elif sql_return==1:
-            passwd = cursor.fetchone()
-            conn.close()  
-            return passwd[0]  
+        # 取正确密码
+        # conn = MySQLdb.connect()
+        # # conn = MySQLdb.connect(host="localhost",user="root",passwd="root",db="userinformation",charset="utf8")
+        # cursor = conn.cursor()
+        # sql = 'select password from userinfo where Uid = "{}"'.format(uid)
+        # sql_return = cursor.execute(sql)
+        #
+        # #如果出现错误返回 ERROR
+        # if sql_return == 0:
+        #     conn.close()
+        #     return "ERROR"
+        # elif sql_return==1:
+        #     passwd = cursor.fetchone()
+        #     conn.close()
+        #     return passwd[0]
 
     def get_UserInfo(Uid):  
         #取个人信息
@@ -243,7 +249,7 @@ class sign_up():
         2 : 不通过检测 , 原因 - 邮箱已注册
         0 ：不通过检测, 原因 -会造成sql注入
         '''
-        conn=MySQLdb.connect(host="localhost",user="root",passwd="root",
+        conn=MySQLdb.connect(host="10.1.108.50",user="vico",passwd="123456",
             db="userinformation",charset="utf8")
         cursor = conn.cursor()
         # 判断是否有注入内容
