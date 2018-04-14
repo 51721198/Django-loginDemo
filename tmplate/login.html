@@ -4,17 +4,16 @@
     <title>LOGIN DEMO-index</title>
 </head>
 <body>
-    <p>
-        {{login_result}},欢迎您 {{user_name}}<br>
-        您的信息如下：
-        性别：{{user_sex}}<br>
-        邮箱：{{user_Email}}<br>
-        电话：{{user_tel}}<br>
-        年龄：{{user_age}}<br>
-        <br> 
-    </p>
-
-    
+    <div align="center">
+        <h1>{{login_result}},欢迎您 {{user_name}}</h1>
+            <ul style="list-style-type:none">
+                <li>您的信息如下：</li>
+                <li>性别：{{user_sex}}</li>
+                <li>邮箱：{{user_Email}}</li>
+                <li>电话：{{user_tel}}</li>
+                <li>年龄：{{user_age}}</li>
+            </ul>
+    </div>
 </body>
 
 

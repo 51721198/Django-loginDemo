@@ -19,8 +19,8 @@ from login import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$',views.login.index),
-    url(r'^login/',views.login.LOGIN),
+    url(r'^$', views.Login.index),
+    url(r'^login/', views.Login.login),
     url(r'^sign-up/',views.sign_up.sign_up_index),
-    url(r'^sign_up/',views.sign_up.sign_up)   
+    url(r'^sign_up/', views.sign_up.signUp)
 ]

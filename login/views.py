@@ -5,7 +5,7 @@ import re
 import random
 
 # Create your views here.
-from login.models import userInformation
+from login.models import UserInformation
 
 '''
 @ author：jaydenchan
@@ -15,9 +15,8 @@ from login.models import userInformation
 欢迎一起学习交流
 '''
 
-
-class login():
-    def LOGIN(request):
+class Login():
+    def login(request):
         # 判断是否为 post请求
         if request.POST:
             # 取输入信息
@@ -25,12 +24,12 @@ class login():
             password = request.POST['password']
 
             # 检测是否有sql注入
-            check_result = login.check_sql(Uid, password)
+            check_result = Login.checkSQL(Uid, password)
             if check_result == 'wrring':
                 return HttpResponse('想注入我没那么简单！')
 
                 # 验证用户名
-            real_passwd = login.get_Passwd(Uid)
+            real_passwd = Login.getPasswd(Uid)
             if real_passwd == "ERROR":
                 return HttpResponse('没有这个用户名!')
 
@@ -38,7 +37,7 @@ class login():
 
             # 验证密码
             if password == real_passwd:
-                run_result, Info = login.get_UserInfo(Uid)
+                run_result, Info = Login.getUserInfo(Uid)
                 if run_result == 1:
                     # 渲染网页
                     connect = {
@@ -61,31 +60,15 @@ class login():
             else:
                 return HttpResponse("密码错误！")
 
-    def get_Passwd(uid):
+    def getPasswd(uid):
         # 查询数据库,如果这里报错那可能需要命令行:python manage.py migrate
         try:
-            password = userInformation.objects.get(name=uid).password
+            password = UserInformation.objects.get(name=uid).password
             return password
         except:
             return "ERROR"
 
-        # 取正确密码
-        # conn = MySQLdb.connect()
-        # # conn = MySQLdb.connect(host="localhost",user="root",passwd="root",db="userinformation",charset="utf8")
-        # cursor = conn.cursor()
-        # sql = 'select password from userinfo where Uid = "{}"'.format(uid)
-        # sql_return = cursor.execute(sql)
-        #
-        # #如果出现错误返回 ERROR
-        # if sql_return == 0:
-        #     conn.close()
-        #     return "ERROR"
-        # elif sql_return==1:
-        #     passwd = cursor.fetchone()
-        #     conn.close()
-        #     return passwd[0]
-
-    def get_UserInfo(Uid):
+    def getUserInfo(Uid):
         # 取个人信息
         print('getting info')
         # conn = MySQLdb.connect(host="localhost",user="root",passwd="root",db="userinformation",charset="utf8")
@@ -106,7 +89,7 @@ class login():
         #     conn.close()
         #     print(username,sex,age,Email,tel)
 
-        result = userInformation.objects.get(name=Uid)
+        result = UserInformation.objects.get(name=Uid)
         print(result.name, result.sex, result.age, result.email, result.tel)
 
         # 返回1 代表成功获取信息
@@ -117,7 +100,7 @@ class login():
         #     conn.close()
         #     return 0,[]
 
-    def check_sql(uid, inputPassword):
+    def checkSQL(uid, inputPassword):
         # 判断是否有sql注入
         if uid[-1] == '\'':
             print('有人尝试注入！')
@@ -140,7 +123,7 @@ class sign_up():
         connect = {}
         return render(response, 'sign-up.html', connect)
 
-    def sign_up(request):
+    def signUp(request):
         if request.POST:
             # 获取输入信息
             name = request.POST['name']
@@ -152,32 +135,22 @@ class sign_up():
             email = request.POST['Email']
 
             # State_code 为状态码  Check_info 为返回的提示信息
-            State_code, Check_info = sign_up.check_inforMation(name, sex, age, tel, password, reinput_password, email)
+            State_code, Check_info = sign_up.checkInforMation(name, sex, age, tel, password, reinput_password, email)
 
             if State_code == 0:
                 # 如果出现了错误 就提示用户
                 return HttpResponse("错误！" + Check_info)
             else:
-                # 生成 userid 即为 Uid
-                # 并且 写入数据库
-                # conn = conn = MySQLdb.connect(host="localhost", user="root",
-                #                               passwd="root", db="userinformation", charset="utf8")
-                # cursor = conn.cursor()
-                # sql = 'insert into userinfo(name,sex,age,tel,Uid,password,Email) value("{}","{}","{}","{}","{}","{}","{}")'.format(
-                #     name, sex, age, tel, Uid, password, email)
-                # # record = cursor.execute(sql)
-                # cursor.execute(sql)
-
                 print(name, password, email, age, sex, tel)
-                uid = sign_up.generate_Uid()
+                uid = sign_up.generateUid()
 
                 # 数据库插入
-                userInformation.objects.create(name=name, age=age, sex=sex, tel=tel, uid=uid, password=password,
+                UserInformation.objects.create(name=name, age=age, sex=sex, tel=tel, uid=uid, password=password,
                                                email=email)
 
                 return HttpResponse('注册成功！你的账号(UID)是 ：' + uid)
 
-    def generate_Uid():
+    def generateUid():
         '''简单的生成一个 uid'''
         # 生成 uid的长度
         loop_Number = random.randint(8, 10)
@@ -187,21 +160,16 @@ class sign_up():
         for i in range(0, loop_Number):
             uid = uid + str(random.randint(0, 9))
 
-        # 连接数据库
-        # conn = MySQLdb.connect(host="localhost", user="root", passwd="root",
-        #                        db="userinformation", charset="utf8")
-        # cursor = conn.cursor()
-        # cursor.execute('select Uid from userinfo where Uid = "{}"'.format(uid))
         # 这里是判断 uid有无重复
-        result = userInformation.objects.filter(uid = uid)
+        result = UserInformation.objects.filter(uid = uid)
         if not result:
             # 没有重复 返回 uid
             return uid
         else:
             # 重复了 重新调用当前函数 新生成一个
-            sign_up.generate_Uid()
+            sign_up.generateUid()
 
-    def check_inforMation(name, sex, age, tel, password, reinput_password, email):
+    def checkInforMation(name, sex, age, tel, password, reinput_password, email):
         # 判断数据是否为空
         if name == '':
             return 0, 'name cannot be empty.'
@@ -233,13 +201,13 @@ class sign_up():
         if check_mail == None:
             return 0, 'error ,邮箱格式错误！'
 
-        if sign_up.check_value_length(name, sex, age, tel, password, reinput_password, email) == 0:
+        if sign_up.checkValueLength(name, sex, age, tel, password, reinput_password, email) == 0:
             return 0, '请检查字符长度！'
 
         if password != reinput_password:
             return 0, '两次输入密码不一致！'
 
-        a = sign_up.check_Email(email)  # 获取返回值
+        a = sign_up.checkEmail(email)  # 获取返回值
         if a == 2:
             return 0, '该邮箱已注册'
         elif a == 0:
@@ -248,7 +216,7 @@ class sign_up():
         # 上面的检测都没有问题 返回1
         return 1, 'OjbK'
 
-    def check_value_length(name, sex, age, tel, password, reinput_password, Email):
+    def checkValueLength(name, sex, age, tel, password, reinput_password, Email):
         # 判断有无超出长度导致 sql注入
         # 有则返回0
         if len(name) > 50 or len(sex) > 5 or len(tel) > 15 or len(age) > 20 or len(password) > 20 or \
@@ -263,10 +231,10 @@ class sign_up():
        0 ：不通过检测, 原因 -会造成sql注入
        '''
 
-    def check_Email(email):
+    def checkEmail(email):
         # 判断是否有注入内容
         if email[-1] != '\'':
-            res = userInformation.objects.filter(email = email)
+            res = UserInformation.objects.filter(email = email)
             # 检查邮箱有无重复
             if not res:
                 return 1
