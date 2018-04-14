@@ -150,6 +150,7 @@ class sign_up():
 
                 return HttpResponse('注册成功！你的账号(UID)是 ：' + uid)
 
+    @staticmethod
     def generateUid():
         '''简单的生成一个 uid'''
         # 生成 uid的长度
@@ -169,7 +170,8 @@ class sign_up():
             # 重复了 重新调用当前函数 新生成一个
             sign_up.generateUid()
 
-    def checkInforMation(name, sex, age, tel, password, reinput_password, email):
+    #第一个参数定义为self的函数一般是类的方法,区别于普通函数或者静态方法
+    def checkInforMation(self, name, sex, age, tel, password, reinput_password, email):
         # 判断数据是否为空
         if name == '':
             return 0, 'name cannot be empty.'
