@@ -15,16 +15,20 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from login import views
-from login.views import SignUp, Login
+
+from login.login_views import SignUp, Login
+from login.hospital_views import HospitalViews
 
 sign = SignUp()
 login = Login()
+hospital = HospitalViews()
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', login.index),
     url(r'^login/', login.login),
     url(r'^sign-up/', sign.sign_up_index),
-    url(r'^sign_up/', sign.signUp)
+    url(r'^sign_up/', sign.signUp),
+    url(r'^hospital/', hospital.getAllHospitals),
+    url(r'^hospitalById/(.+)/$', hospital.getOneHospital)
 ]
