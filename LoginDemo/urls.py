@@ -16,8 +16,8 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from login.login_views import SignUp, Login
-from login.hospital_views import HospitalViews
+from login.views.login_views import SignUp, Login
+from login.views.hospital_views import HospitalViews
 
 sign = SignUp()
 login = Login()

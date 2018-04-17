@@ -1,10 +1,7 @@
-from django.http import HttpResponse
 from django.core import serializers
+from django.http import HttpResponse
 
 from login.models import Hospital
-
-import json
-
 from login.service.hospital_service import HosService
 
 hospitalservice = HosService()
