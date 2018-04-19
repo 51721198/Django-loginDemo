@@ -9,3 +9,10 @@ class HosService:
             return 0, ""
         else:
             return 1, res
+
+    def getAllHospitals(self):
+        list = Hospital.objects.all()
+        if list:
+            return 1, list
+        else:
+            return 0, None

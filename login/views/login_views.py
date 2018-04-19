@@ -1,19 +1,12 @@
-from django.shortcuts import render
 from django.http import HttpResponse
-import MySQLdb
-import re
-import random
+from django.shortcuts import render
 
 # Create your views here.
-from login.models import UserInformation
 from login.service.login_service import LoginService
 
 '''
 @ author：jaydenchan
-@ e-mail：2564845837@qq.com
 
-开发者是新手 求轻喷
-欢迎一起学习交流
 '''
 
 loginservice = LoginService()

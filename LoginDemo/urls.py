@@ -29,6 +29,6 @@ urlpatterns = [
     url(r'^login/', login.login),
     url(r'^sign-up/', sign.sign_up_index),
     url(r'^sign_up/', sign.signUp),
-    url(r'^hospital/', hospital.getAllHospitals),
+    url(r'^hospital/', hospital.all_hospital),
     url(r'^hospitalById/(.+)/$', hospital.getOneHospital)
 ]

@@ -6,6 +6,7 @@ from login.service.hospital_service import HosService
 
 hospitalservice = HosService()
 
+
 class HospitalViews:
     def addHospital(self, request):
         if request.POST:
@@ -34,9 +35,9 @@ class HospitalViews:
         else:
             return HttpResponse(serializers.serialize("json", hos, ensure_ascii=False))
 
-    def getAllHospitals(self, request):
-        list = Hospital.objects.all()
-        if list:
-            return HttpResponse(serializers.serialize("json", list, ensure_ascii=False))
+    def all_hospital(self, request):
+        code, hostlist = hospitalservice.getAllHospitals()
+        if code == 1:
+            return HttpResponse(serializers.serialize("json", hostlist, ensure_ascii=False))
         else:
             return HttpResponse('没有数据')
